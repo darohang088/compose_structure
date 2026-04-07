@@ -11,4 +11,6 @@ data class ExampleModel(
     val body: String?,
     @SerializedName("userId")
     val userId: Int?
+
+    
 )

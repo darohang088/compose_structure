@@ -38,8 +38,9 @@ class ExampleRepository @Inject constructor(
             // Sync with network if connected
             if (networkChecker.hasInternetConnection()) {
                 Timber.d("Fetching fresh data from network")
+//                val response = apiService.getExamples()
                 val response = apiService.getExamples()
-                
+
                 if (response.isSuccessful) {
                     response.body()?.let { remoteData ->
                         // Update cache
