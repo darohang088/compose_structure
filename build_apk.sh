@@ -74,19 +74,10 @@ esac
 
 # Set up constants for output
 APP_NAME="MyApp"
-# Get the version name from build.gradle.kts (simple extraction, defaults to 1.0)
-VERSION_NAME="1.0"
-SUFFIX=""
-case "$FLAVOR" in
-    dev) SUFFIX="-DEV" ;;
-    staging) SUFFIX="-STAGING" ;;
-    preprod) SUFFIX="-PREPROD" ;;
-    production) SUFFIX="" ;;
-esac
-FULL_VERSION="${VERSION_NAME}${SUFFIX}"
+# Get the version name from build.gradle.kts (simple extraction, defaults to 0.1)
+VERSION_NAME="0.1"
 
-DATE_STR=$(date +%Y%m%d)
-OUTPUT_FILENAME="${APP_NAME}-${PASCAL_FLAVOR}-${PASCAL_BUILD_TYPE}-v${FULL_VERSION}-${DATE_STR}.apk"
+OUTPUT_FILENAME="V-${FLAVOR}-${BUILD_TYPE}-${VERSION_NAME}.apk"
 DEST_DIR="${PWD}/builds"
 DEST_FILE="${DEST_DIR}/${OUTPUT_FILENAME}"
 

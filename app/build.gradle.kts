@@ -106,6 +106,13 @@ android {
             firebaseAppDistribution {
                 artifactType = "APK"
                 releaseNotes = "New automatic deployment from CI"
+                
+                val credencesFile = rootProject.file("firebase-credentials.json")
+                if (credencesFile.exists()) {
+                    serviceCredentialsFile = credencesFile.absolutePath
+                } else {
+                    // Fallbacks: you can also set FIREBASE_TOKEN or GOOGLE_APPLICATION_CREDENTIALS environment variables.
+                }
             }
         }
         debug {
