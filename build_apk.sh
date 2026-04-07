@@ -11,7 +11,7 @@ CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
 show_help() {
-    echo -e "${CYAN}Usage: ./build_apk.sh <flavor> <build_type>${NC}"
+    echo -e "${CYAN}Usage: ./build_apk.sh <flavor> <build_type> [version]${NC}"
     echo ""
     echo "Available Flavors:    dev, staging, preprod, production"
     echo "Available Build Types: debug, release"
@@ -27,8 +27,8 @@ show_help() {
     echo "  ./build_apk.sh production release"
 }
 
-if [ "$#" -ne 2 ]; then
-    echo -e "${RED}Error: Missing arguments.${NC}"
+if [ "$#" -lt 2 ] || [ "$#" -gt 3 ]; then
+    echo -e "${RED}Error: Invalid arguments.${NC}"
     show_help
     exit 1
 fi
@@ -40,6 +40,7 @@ fi
 
 FLAVOR=$(echo "$1" | tr '[:upper:]' '[:lower:]')
 BUILD_TYPE=$(echo "$2" | tr '[:upper:]' '[:lower:]')
+RAW_VERSION=${3:-0.1}
 
 # Validate Flavor
 case "$FLAVOR" in
@@ -74,10 +75,12 @@ esac
 
 # Set up constants for output
 APP_NAME="MyApp"
-# Get the version name from build.gradle.kts (simple extraction, defaults to 0.1)
-VERSION_NAME="0.1"
+# Get the version name injected from CLI
+VERSION_NAME="${RAW_VERSION}-${FLAVOR}-${BUILD_TYPE}"
 
-OUTPUT_FILENAME="V-${FLAVOR}-${BUILD_TYPE}-${VERSION_NAME}.apk"
+GRADLE_ARGS="-PversionName=${VERSION_NAME}"
+
+OUTPUT_FILENAME="V-${VERSION_NAME}.apk"
 DEST_DIR="${PWD}/builds"
 DEST_FILE="${DEST_DIR}/${OUTPUT_FILENAME}"
 
@@ -96,7 +99,7 @@ echo "Building APK... This may take a few minutes."
 echo ""
 
 # Run Gradle Build
-if ./gradlew "${GRADLE_TASK}" --stacktrace; then
+if ./gradlew "${GRADLE_TASK}" ${GRADLE_ARGS} --stacktrace; then
     echo ""
     echo -e "${GREEN}✓ Build succeeded! Copying APK...${NC}"
     
@@ -118,7 +121,7 @@ if ./gradlew "${GRADLE_TASK}" --stacktrace; then
             echo -e "${GREEN}=================================================${NC}"
             
             echo -e "\n${CYAN}▶ Triggering Firebase App Distribution Upload...${NC}"
-            if ./gradlew "${UPLOAD_TASK}" --stacktrace; then
+            if ./gradlew "${UPLOAD_TASK}" ${GRADLE_ARGS} --stacktrace; then
                 echo -e "${GREEN}🎉 Firebase Upload Successful!${NC}"
             else
                 echo -e "${YELLOW}⚠️ APK Built successfully, but Firebase Upload failed! Check your authentication.${NC}"

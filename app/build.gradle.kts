@@ -26,7 +26,9 @@ android {
         minSdk = 24
         targetSdk = 35
         versionCode = 1
-        versionName = "1.0"
+        
+        val injectedVersionName = project.findProperty("versionName") as? String
+        versionName = injectedVersionName ?: "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -58,7 +60,6 @@ android {
     productFlavors {
         create("dev") {
             dimension = "environment"
-            versionNameSuffix = "-DEV"
             resValue("string", "app_name", "MyApp DEV")
             buildConfigField("String", "BASE_URL", "\"https://dev-api.example.com/\"")
             buildConfigField("boolean", "IS_LOGGING_ENABLED", "true")
@@ -66,7 +67,6 @@ android {
         }
         create("staging") {
             dimension = "environment"
-            versionNameSuffix = "-STAGING"
             resValue("string", "app_name", "MyApp Staging")
             buildConfigField("String", "BASE_URL", "\"https://staging-api.example.com/\"")
             buildConfigField("boolean", "IS_LOGGING_ENABLED", "true")
@@ -74,7 +74,6 @@ android {
         }
         create("preprod") {
             dimension = "environment"
-            versionNameSuffix = "-PREPROD"
             resValue("string", "app_name", "MyApp PreProd")
             buildConfigField("String", "BASE_URL", "\"https://preprod-api.example.com/\"")
             buildConfigField("boolean", "IS_LOGGING_ENABLED", "false")
