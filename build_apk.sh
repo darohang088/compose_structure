@@ -62,6 +62,7 @@ PASCAL_FLAVOR=$(echo "$FLAVOR" | awk '{print toupper(substr($0,1,1)) substr($0,2
 PASCAL_BUILD_TYPE=$(echo "$BUILD_TYPE" | awk '{print toupper(substr($0,1,1)) substr($0,2)}')
 
 GRADLE_TASK="assemble${PASCAL_FLAVOR}${PASCAL_BUILD_TYPE}"
+UPLOAD_TASK="appDistributionUpload${PASCAL_FLAVOR}${PASCAL_BUILD_TYPE}"
 
 # Determine Base URL for display
 case "$FLAVOR" in
@@ -124,6 +125,14 @@ if ./gradlew "${GRADLE_TASK}" --stacktrace; then
             echo -e "${CYAN}Output File : ${DEST_FILE}${NC}"
             echo -e "${CYAN}File Size   : ${FILE_SIZE}${NC}"
             echo -e "${GREEN}=================================================${NC}"
+            
+            echo -e "\n${CYAN}▶ Triggering Firebase App Distribution Upload...${NC}"
+            if ./gradlew "${UPLOAD_TASK}" --stacktrace; then
+                echo -e "${GREEN}🎉 Firebase Upload Successful!${NC}"
+            else
+                echo -e "${YELLOW}⚠️ APK Built successfully, but Firebase Upload failed! Check your authentication.${NC}"
+            fi
+            
         else
             echo -e "${RED}Error: Build succeeded but no APK found in ${SRC_APK_DIR}${NC}"
             exit 1

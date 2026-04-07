@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "620295403737",
+    "project_id": "composestruture",
+    "storage_bucket": "composestruture.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:620295403737:android:6ae41e6e18ba030b5c66c8",
+        "android_client_info": {
+          "package_name": "com.example.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAk9zPxa9UQmDX-AL9hDYY5NfQzwcTGvQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
