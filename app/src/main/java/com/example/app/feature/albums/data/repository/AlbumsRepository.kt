@@ -3,9 +3,7 @@ package com.example.app.feature.albums.data.repository
 
 import com.example.app.feature.albums.data.model.AlbumsModel
 import com.example.app.feature.albums.data.remote.AlbumsApiService
-import com.example.app.utils.UiState
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -13,19 +11,16 @@ import javax.inject.Singleton
 class AlbumsRepository @Inject constructor(
     private val apiService: AlbumsApiService
 ) {
-    suspend fun fetchAlbums(): Flow<UiState<List<AlbumsModel>>> = flow {
-        emit(UiState.Loading)
-        try {
-            val response = apiService.getAlbumsData()
+    suspend fun fetchAlbums(page: Int, limit: Int = 20): Result<List<AlbumsModel>> {
+        return try {
+            val response = apiService.getAlbumsData(page, limit)
             if (response.isSuccessful) {
-                response.body()?.let {
-                    emit(UiState.Success(it))
-                } ?: emit(UiState.Error("Empty response body"))
+                Result.success(response.body() ?: emptyList())
             } else {
-                emit(UiState.Error("Server error: ${response.code()}"))
+                Result.failure(Exception("Server error: ${response.code()}"))
             }
         } catch (e: Exception) {
-            emit(UiState.Error(e.message ?: "Unknown error occurred"))
+            Result.failure(e)
         }
     }
 }

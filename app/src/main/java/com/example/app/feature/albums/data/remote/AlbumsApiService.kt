@@ -4,8 +4,12 @@ package com.example.app.feature.albums.data.remote
 import com.example.app.feature.albums.data.model.AlbumsModel
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface AlbumsApiService {
     @GET("/albums")
-    suspend fun getAlbumsData(): Response<List<AlbumsModel>>
+    suspend fun getAlbumsData(
+        @Query("_page") page: Int,
+        @Query("_limit") limit: Int = 20
+    ): Response<List<AlbumsModel>>
 }
