@@ -18,6 +18,7 @@ fun ProfileHomeScreen(
     onNavigateToEditProfile: () -> Unit,
     onNavigateToSettings: () -> Unit,
     onNavigateToDetails: () -> Unit,
+    onNavigateToAlbums: () -> Unit,
     onLogout: () -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -37,6 +38,11 @@ fun ProfileHomeScreen(
             
             Button(onClick = onNavigateToDetails) {
                 Text(text = "Profile Details")
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            Button(onClick = onNavigateToAlbums) {
+                Text(text = "Albums")
             }
             Spacer(modifier = Modifier.height(32.dp))
             

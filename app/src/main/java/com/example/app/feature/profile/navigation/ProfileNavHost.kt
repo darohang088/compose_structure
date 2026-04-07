@@ -8,12 +8,14 @@ import com.example.app.feature.profile.ui.EditProfileScreen
 import com.example.app.feature.profile.ui.ProfileDetailsScreen
 import com.example.app.feature.profile.ui.ProfileHomeScreen
 import com.example.app.feature.profile.ui.SettingsScreen
+import com.example.app.feature.albums.ui.AlbumsScreen
 
 object ProfileRoutes {
     const val PROFILE_HOME = "profile_home"
     const val EDIT_PROFILE = "edit_profile"
     const val SETTINGS = "settings"
     const val PROFILE_DETAILS = "profile_details"
+    const val ALBUMS = "albums"
 }
 
 @Composable
@@ -26,6 +28,7 @@ fun ProfileNavHost(onLogout: () -> Unit) {
                 onNavigateToEditProfile = { navController.navigate(ProfileRoutes.EDIT_PROFILE) },
                 onNavigateToSettings = { navController.navigate(ProfileRoutes.SETTINGS) },
                 onNavigateToDetails = { navController.navigate(ProfileRoutes.PROFILE_DETAILS) },
+                onNavigateToAlbums = { navController.navigate(ProfileRoutes.ALBUMS) },
                 onLogout = onLogout
             )
         }
@@ -46,6 +49,10 @@ fun ProfileNavHost(onLogout: () -> Unit) {
             ProfileDetailsScreen(
                 onNavigateBack = { navController.popBackStack() }
             )
+        }
+
+        composable(ProfileRoutes.ALBUMS) {
+            AlbumsScreen()
         }
     }
 }

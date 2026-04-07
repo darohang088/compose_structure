@@ -61,21 +61,21 @@ android {
         create("dev") {
             dimension = "environment"
             resValue("string", "app_name", "MyApp DEV")
-            buildConfigField("String", "BASE_URL", "\"https://dev-api.example.com/\"")
+            buildConfigField("String", "BASE_URL", "\"https://jsonplaceholder.typicode.com/\"")
             buildConfigField("boolean", "IS_LOGGING_ENABLED", "true")
             buildConfigField("String", "ENVIRONMENT_NAME", "\"DEV\"")
         }
         create("staging") {
             dimension = "environment"
             resValue("string", "app_name", "MyApp Staging")
-            buildConfigField("String", "BASE_URL", "\"https://staging-api.example.com/\"")
+            buildConfigField("String", "BASE_URL", "\"https://jsonplaceholder.typicode.com/\"")
             buildConfigField("boolean", "IS_LOGGING_ENABLED", "true")
             buildConfigField("String", "ENVIRONMENT_NAME", "\"STAGING\"")
         }
         create("preprod") {
             dimension = "environment"
             resValue("string", "app_name", "MyApp PreProd")
-            buildConfigField("String", "BASE_URL", "\"https://preprod-api.example.com/\"")
+            buildConfigField("String", "BASE_URL", "\"https://jsonplaceholder.typicode.com/\"")
             buildConfigField("boolean", "IS_LOGGING_ENABLED", "false")
             buildConfigField("String", "ENVIRONMENT_NAME", "\"PREPROD\"")
         }
@@ -83,7 +83,7 @@ android {
             dimension = "environment"
             // Production has no suffix
             resValue("string", "app_name", "MyApp")
-            buildConfigField("String", "BASE_URL", "\"https://api.example.com/\"")
+            buildConfigField("String", "BASE_URL", "\"https://jsonplaceholder.typicode.com/\"")
             buildConfigField("boolean", "IS_LOGGING_ENABLED", "false")
             buildConfigField("String", "ENVIRONMENT_NAME", "\"PRODUCTION\"")
         }
@@ -170,6 +170,7 @@ dependencies {
     // Hilt
     implementation(libs.hilt.android)
     implementation(libs.androidx.lifecycle.runtime.compose.android)
+    implementation("com.google.guava:guava:33.0.0-android")
     ksp(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
