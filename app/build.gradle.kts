@@ -58,7 +58,6 @@ android {
     productFlavors {
         create("dev") {
             dimension = "environment"
-            applicationIdSuffix = ".dev"
             versionNameSuffix = "-DEV"
             resValue("string", "app_name", "MyApp DEV")
             buildConfigField("String", "BASE_URL", "\"https://dev-api.example.com/\"")
@@ -67,7 +66,6 @@ android {
         }
         create("staging") {
             dimension = "environment"
-            applicationIdSuffix = ".staging"
             versionNameSuffix = "-STAGING"
             resValue("string", "app_name", "MyApp Staging")
             buildConfigField("String", "BASE_URL", "\"https://staging-api.example.com/\"")
@@ -76,7 +74,6 @@ android {
         }
         create("preprod") {
             dimension = "environment"
-            applicationIdSuffix = ".preprod"
             versionNameSuffix = "-PREPROD"
             resValue("string", "app_name", "MyApp PreProd")
             buildConfigField("String", "BASE_URL", "\"https://preprod-api.example.com/\"")
@@ -118,8 +115,19 @@ android {
         debug {
             isDebuggable = true
             isMinifyEnabled = false
-            applicationIdSuffix = ".debug"
             signingConfig = signingConfigs.getByName("debug")
+            
+            firebaseAppDistribution {
+                artifactType = "APK"
+                releaseNotes = "New automatic debug deployment from CI"
+                
+                val credencesFile = rootProject.file("firebase-credentials.json")
+                if (credencesFile.exists()) {
+                    serviceCredentialsFile = credencesFile.absolutePath
+                } else {
+                    // Fallbacks: you can also set FIREBASE_TOKEN or GOOGLE_APPLICATION_CREDENTIALS environment variables.
+                }
+            }
         }
     }
     compileOptions {
