@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+# ANSI color codes
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+CYAN='\033[0;36m'
+NC='\033[0m' # No Color
+
+echo -e "${CYAN}▶ Running Pre-Commit Checks...${NC}"
+
+# Check for android.util.Log usage in .kt files natively before building
+# We exclude the build folder and any detekt or formatting configurations
+LOG_FILES=$(git diff --cached --name-only | grep '\.kt$' | while read file; do
+    if grep -n 'android.util.Log' "$file"; then
+        echo "$file"
+    fi
+done)
+
+if [ -n "$LOG_FILES" ]; then
+    echo -e "${RED}❌ COMMIT FAILED: 'android.util.Log' usage detected!${NC}"
+    echo "You are violating the strict logging rule. Debug logs must not be committed."
+    echo "Please use 'Timber' instead of 'Log' or remove the log completely."
+    echo -e "${YELLOW}Files with violations:${NC}"
+    echo "$LOG_FILES"
+    exit 1
+else
+    echo -e "${GREEN}✓ No android.util.Log violations detected.${NC}"
+fi
+
+echo "Running Detekt Static Analysis..."
+# Run detekt. This will fail if there are any code smells, unused variables, formatting, etc.
+if ! ./gradlew detekt --stacktrace; then
+    echo -e "${RED}❌ COMMIT FAILED: Detekt Static Analysis reported issues.${NC}"
+    echo "Please fix your code smells, formatting issues, or unused code!"
+    exit 1
+fi
+
+echo -e "${GREEN}✓ Detekt passed!${NC}"
+
+# Validate compilation directly. Bounces against the new -Werror flagging.
+echo "Running Compile Verification (-Werror is active)..."
+if ! ./gradlew assembleDebug --stacktrace; then
+    echo -e "${RED}❌ COMMIT FAILED: Project Code Compilation Failed!${NC}"
+    echo "Notice: Kotlin Warnings are treated as Errors natively. You may have an unused import or private variable blocking the build."
+    exit 1
+fi
+
+echo -e "${GREEN}🎉 All Checks Passed! Committing...${NC}"
+exit 0
