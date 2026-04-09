@@ -7,8 +7,8 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
 import com.example.app.data.local.AppDatabase
 import com.example.app.data.local.ExampleDao
-import com.example.app.data.remote.ApiService
-import com.example.app.data.remote.RetrofitInstance
+import com.example.app.remote.ApiService
+import com.example.app.remote.RetrofitInstance
 import com.example.app.data.repository.ExampleRepository
 import com.example.app.utils.Constants
 import com.example.app.utils.NetworkChecker

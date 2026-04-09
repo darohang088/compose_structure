@@ -52,7 +52,7 @@ fun ProfileHomeScreen(
                 Spacer(modifier = Modifier.height(32.dp))
 
                 Button(onClick = onLogout) {
-                    Text(text = "Back Out")
+                    Text(text = "Back")
                 }
             }
         }

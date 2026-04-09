@@ -1,4 +1,4 @@
-package com.example.app.data.remote
+package com.example.app.remote
 
 import com.example.app.data.model.ExampleModel
 import com.example.app.utils.Constants

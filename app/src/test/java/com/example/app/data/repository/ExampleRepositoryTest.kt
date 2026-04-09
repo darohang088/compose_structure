@@ -4,9 +4,8 @@ import app.cash.turbine.test
 import com.example.app.data.local.ExampleDao
 import com.example.app.data.local.toEntity
 import com.example.app.data.model.ExampleModel
-import com.example.app.data.remote.ApiService
+import com.example.app.remote.ApiService
 import com.example.app.utils.NetworkChecker
-import com.example.app.utils.ServerException
 import com.example.app.utils.UiState
 import io.mockk.coEvery
 import io.mockk.coVerify

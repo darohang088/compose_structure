@@ -1,5 +1,6 @@
-package com.example.app.data.remote
+package com.example.app.remote
 
+import com.example.app.utils.AppConfig
 import com.example.app.utils.Constants
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -11,7 +12,7 @@ object RetrofitInstance {
 
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(com.example.app.utils.AppConfig.BASE_URL)
+            .baseUrl(AppConfig.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

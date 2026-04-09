@@ -4,7 +4,7 @@ import com.example.app.data.local.ExampleDao
 import com.example.app.data.local.toEntity
 import com.example.app.data.local.toModel
 import com.example.app.data.model.ExampleModel
-import com.example.app.data.remote.ApiService
+import com.example.app.remote.ApiService
 import com.example.app.utils.EmptyCacheException
 import com.example.app.utils.NetworkChecker
 import com.example.app.utils.NetworkTimeoutException
