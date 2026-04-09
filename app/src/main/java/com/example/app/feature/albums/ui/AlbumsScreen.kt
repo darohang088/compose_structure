@@ -87,6 +87,5 @@ fun AlbumsScreen(
 @Suppress("MagicNumber")
 fun AlbumsScreenPreview() {
     MaterialTheme {
-        // Preview currently skipped for dynamic list
     }
 }

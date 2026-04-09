@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.app.components.AppUiWrapper
 
 @Composable
 fun ProfileHomeScreen(
@@ -21,34 +22,40 @@ fun ProfileHomeScreen(
     onNavigateToAlbums: () -> Unit,
     onLogout: () -> Unit
 ) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = "Profile Home", style = MaterialTheme.typography.titleLarge)
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            Button(onClick = onNavigateToEditProfile) {
-                Text(text = "Edit Profile")
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            
-            Button(onClick = onNavigateToSettings) {
-                Text(text = "Settings")
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            
-            Button(onClick = onNavigateToDetails) {
-                Text(text = "Profile Details")
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            Button(onClick = onNavigateToAlbums) {
-                Text(text = "Albums")
-            }
-            Spacer(modifier = Modifier.height(32.dp))
-            
-            Button(onClick = onLogout) {
-                Text(text = "Log Out")
+    AppUiWrapper(
+        title = "Profile Home",
+        isStatusBarTextDark = true,
+        topBar = {}
+    ) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+//                Spacer(modifier = Modifier.height(16.dp))
+//
+//                Button(onClick = onNavigateToEditProfile) {
+//                    Text(text = "Edit Profile")
+//                }
+//                Spacer(modifier = Modifier.height(8.dp))
+//
+//                Button(onClick = onNavigateToSettings) {
+//                    Text(text = "Settings")
+//                }
+//                Spacer(modifier = Modifier.height(8.dp))
+//
+//                Button(onClick = onNavigateToDetails) {
+//                    Text(text = "Profile Details")
+//                }
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(onClick = onNavigateToAlbums) {
+                    Text(text = "get Albums List")
+                }
+                Spacer(modifier = Modifier.height(32.dp))
+
+                Button(onClick = onLogout) {
+                    Text(text = "Back Out")
+                }
             }
         }
     }
+
 }

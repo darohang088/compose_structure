@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.app.components.AppUiWrapper
 
 @Composable
 fun LoginScreen(
@@ -20,23 +21,30 @@ fun LoginScreen(
     onNavigateToForgotPassword: () -> Unit,
     onLoginSuccess: () -> Unit
 ) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = "Login Screen", style = MaterialTheme.typography.titleLarge)
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            Button(onClick = onLoginSuccess) {
-                Text(text = "Simulate Login")
-            }
-            
-            Spacer(modifier = Modifier.height(8.dp))
-            TextButton(onClick = onNavigateToRegister) {
-                Text(text = "Don't have an account? Register")
-            }
-            
-            TextButton(onClick = onNavigateToForgotPassword) {
-                Text(text = "Forgot Password?")
+    AppUiWrapper(
+        title = "",
+        isStatusBarTextDark = true,
+        topBar = {}
+    ) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(text = "Login Screen", style = MaterialTheme.typography.titleLarge)
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(onClick = onLoginSuccess) {
+                    Text(text = "Login")
+                }
+
+//                Spacer(modifier = Modifier.height(8.dp))
+//                TextButton(onClick = onNavigateToRegister) {
+//                    Text(text = "Don't have an account? Register")
+//                }
+//
+//                TextButton(onClick = onNavigateToForgotPassword) {
+//                    Text(text = "Forgot Password?")
+//                }
             }
         }
     }
+
 }

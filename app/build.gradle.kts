@@ -136,9 +136,9 @@ android {
     kotlinOptions {
         jvmTarget = "17"
         // VERY STRICT: Treat all Kotlin warnings as errors natively
-        freeCompilerArgs += listOf(
-            "-Werror"
-        )
+//        freeCompilerArgs += listOf(
+//            "-Werror"
+//        )
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.10"

@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.app.feature.auth.navigation.AuthNavHost
+import com.example.app.feature.login.navigation.LoginHost
 import com.example.app.feature.profile.navigation.ProfileNavHost
 import com.example.app.ui.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
