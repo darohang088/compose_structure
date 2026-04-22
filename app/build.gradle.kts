@@ -65,18 +65,18 @@ android {
         }
         create("staging") {
             dimension = "environment"
-            resValue("string", "app_name", "https://jsonplaceholder.typicode.com/dev")
-            buildConfigField("String", "ENVIRONMENT_NAME", "\"DEV\"")
+            resValue("string", "app_name", "https://jsonplaceholder.typicode.com/staging")
+            buildConfigField("String", "ENVIRONMENT_NAME", "\"staging\"")
         }
         create("preprod") {
             dimension = "environment"
             resValue("string", "app_name", "MyApp PreProd")
-            resValue("string", "app_name", "https://jsonplaceholder.typicode.com/dev")
-            buildConfigField("String", "ENVIRONMENT_NAME", "\"DEV\"")
+            resValue("string", "app_name", "https://jsonplaceholder.typicode.com/preprod")
+            buildConfigField("String", "ENVIRONMENT_NAME", "\"preprod\"")
         create("production") {
             dimension = "environment"
-            resValue("string", "app_name", "https://jsonplaceholder.typicode.com/dev")
-            buildConfigField("String", "ENVIRONMENT_NAME", "\"DEV\"")
+            resValue("string", "app_name", "https://jsonplaceholder.typicode.com/production")
+            buildConfigField("String", "ENVIRONMENT_NAME", "\"production\"")
         }
     }
 
