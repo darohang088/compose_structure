@@ -60,32 +60,23 @@ android {
     productFlavors {
         create("dev") {
             dimension = "environment"
-            resValue("string", "app_name", "MyApp DEV")
-            buildConfigField("String", "BASE_URL", "\"https://jsonplaceholder.typicode.com/\"")
-            buildConfigField("boolean", "IS_LOGGING_ENABLED", "true")
+            resValue("string", "app_name", "https://jsonplaceholder.typicode.com/dev")
             buildConfigField("String", "ENVIRONMENT_NAME", "\"DEV\"")
         }
         create("staging") {
             dimension = "environment"
-            resValue("string", "app_name", "MyApp Staging")
-            buildConfigField("String", "BASE_URL", "\"https://jsonplaceholder.typicode.com/\"")
-            buildConfigField("boolean", "IS_LOGGING_ENABLED", "true")
-            buildConfigField("String", "ENVIRONMENT_NAME", "\"STAGING\"")
+            resValue("string", "app_name", "https://jsonplaceholder.typicode.com/dev")
+            buildConfigField("String", "ENVIRONMENT_NAME", "\"DEV\"")
         }
         create("preprod") {
             dimension = "environment"
             resValue("string", "app_name", "MyApp PreProd")
-            buildConfigField("String", "BASE_URL", "\"https://jsonplaceholder.typicode.com/\"")
-            buildConfigField("boolean", "IS_LOGGING_ENABLED", "false")
-            buildConfigField("String", "ENVIRONMENT_NAME", "\"PREPROD\"")
-        }
+            resValue("string", "app_name", "https://jsonplaceholder.typicode.com/dev")
+            buildConfigField("String", "ENVIRONMENT_NAME", "\"DEV\"")
         create("production") {
             dimension = "environment"
-            // Production has no suffix
-            resValue("string", "app_name", "MyApp")
-            buildConfigField("String", "BASE_URL", "\"https://jsonplaceholder.typicode.com/\"")
-            buildConfigField("boolean", "IS_LOGGING_ENABLED", "false")
-            buildConfigField("String", "ENVIRONMENT_NAME", "\"PRODUCTION\"")
+            resValue("string", "app_name", "https://jsonplaceholder.typicode.com/dev")
+            buildConfigField("String", "ENVIRONMENT_NAME", "\"DEV\"")
         }
     }
 
@@ -136,9 +127,9 @@ android {
     kotlinOptions {
         jvmTarget = "17"
         // VERY STRICT: Treat all Kotlin warnings as errors natively
-//        freeCompilerArgs += listOf(
-//            "-Werror"
-//        )
+        freeCompilerArgs += listOf(
+            "-Werror"
+        )
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.10"
