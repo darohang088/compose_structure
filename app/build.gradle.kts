@@ -20,13 +20,14 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace = "com.example.app"
     compileSdk = 35
+    ndkVersion = "28.2.13676358"
 
     defaultConfig {
         applicationId = "com.example.app"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
-        
+
         val injectedVersionName = project.findProperty("versionName") as? String
         versionName = injectedVersionName ?: "1.0"
 
@@ -34,11 +35,26 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        externalNativeBuild {
+            cmake {
+                cppFlags += "-std=c++17"
+                cppFlags += "-fvisibility=hidden" // For production-ready release
+                abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86_64")
+            }
+        }
     }
 
     buildFeatures {
         compose = true
         buildConfig = true
+    }
+
+    externalNativeBuild {
+        cmake {
+            path("src/main/cpp/CMakeLists.txt")
+            version = "3.22.1"
+        }
     }
 
     signingConfigs {
@@ -73,129 +89,130 @@ android {
             resValue("string", "app_name", "MyApp PreProd")
             resValue("string", "app_name", "https://jsonplaceholder.typicode.com/preprod")
             buildConfigField("String", "ENVIRONMENT_NAME", "\"preprod\"")
-        create("production") {
-            dimension = "environment"
-            resValue("string", "app_name", "https://jsonplaceholder.typicode.com/production")
-            buildConfigField("String", "ENVIRONMENT_NAME", "\"production\"")
+            create("production") {
+                dimension = "environment"
+                resValue("string", "app_name", "https://jsonplaceholder.typicode.com/production")
+                buildConfigField("String", "ENVIRONMENT_NAME", "\"production\"")
+            }
         }
-    }
 
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+        buildTypes {
+            release {
+                isMinifyEnabled = true
+                isShrinkResources = true
+                proguardFiles(
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
+                )
+                signingConfig = signingConfigs.getByName("release")
+
+                firebaseAppDistribution {
+                    artifactType = "APK"
+                    releaseNotes = "New automatic deployment from CI"
+
+                    val credencesFile = rootProject.file("firebase-credentials.json")
+                    if (credencesFile.exists()) {
+                        serviceCredentialsFile = credencesFile.absolutePath
+                    } else {
+                        // Fallbacks: you can also set FIREBASE_TOKEN or GOOGLE_APPLICATION_CREDENTIALS environment variables.
+                    }
+                }
+            }
+            debug {
+                isDebuggable = true
+                isMinifyEnabled = false
+                signingConfig = signingConfigs.getByName("debug")
+
+                firebaseAppDistribution {
+                    artifactType = "APK"
+                    releaseNotes = "New automatic debug deployment from CI"
+
+                    val credencesFile = rootProject.file("firebase-credentials.json")
+                    if (credencesFile.exists()) {
+                        serviceCredentialsFile = credencesFile.absolutePath
+                    } else {
+                        // Fallbacks: you can also set FIREBASE_TOKEN or GOOGLE_APPLICATION_CREDENTIALS environment variables.
+                    }
+                }
+            }
+        }
+        compileOptions {
+            sourceCompatibility = JavaVersion.VERSION_17
+            targetCompatibility = JavaVersion.VERSION_17
+        }
+        kotlinOptions {
+            jvmTarget = "17"
+            // VERY STRICT: Treat all Kotlin warnings as errors natively
+            freeCompilerArgs += listOf(
+                "-Werror"
             )
-            signingConfig = signingConfigs.getByName("release")
-            
-            firebaseAppDistribution {
-                artifactType = "APK"
-                releaseNotes = "New automatic deployment from CI"
-                
-                val credencesFile = rootProject.file("firebase-credentials.json")
-                if (credencesFile.exists()) {
-                    serviceCredentialsFile = credencesFile.absolutePath
-                } else {
-                    // Fallbacks: you can also set FIREBASE_TOKEN or GOOGLE_APPLICATION_CREDENTIALS environment variables.
-                }
-            }
         }
-        debug {
-            isDebuggable = true
-            isMinifyEnabled = false
-            signingConfig = signingConfigs.getByName("debug")
-            
-            firebaseAppDistribution {
-                artifactType = "APK"
-                releaseNotes = "New automatic debug deployment from CI"
-                
-                val credencesFile = rootProject.file("firebase-credentials.json")
-                if (credencesFile.exists()) {
-                    serviceCredentialsFile = credencesFile.absolutePath
-                } else {
-                    // Fallbacks: you can also set FIREBASE_TOKEN or GOOGLE_APPLICATION_CREDENTIALS environment variables.
-                }
+        composeOptions {
+            kotlinCompilerExtensionVersion = "1.5.10"
+        }
+        packaging {
+            resources {
+                excludes += "/META-INF/{AL2.0,LGPL2.1}"
             }
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+
+    dependencies {
+        // Firebase
+        implementation(platform(libs.firebase.bom))
+        implementation(libs.firebase.analytics)
+
+        implementation(libs.androidx.core.ktx)
+        implementation(libs.androidx.lifecycle.runtime.ktx)
+        implementation(libs.androidx.lifecycle.viewmodel.compose)
+        implementation(libs.androidx.activity.compose)
+        implementation(platform(libs.androidx.compose.bom))
+        implementation(libs.androidx.ui)
+        implementation(libs.androidx.ui.graphics)
+        implementation(libs.androidx.ui.tooling.preview)
+        implementation(libs.androidx.material3)
+        implementation(libs.androidx.navigation.compose)
+        implementation(libs.androidx.core.splashscreen)
+
+        // Hilt
+        implementation(libs.hilt.android)
+        implementation(libs.androidx.lifecycle.runtime.compose.android)
+        implementation("com.google.guava:guava:33.0.0-android")
+        ksp(libs.hilt.android.compiler)
+        implementation(libs.androidx.hilt.navigation.compose)
+
+        // Retrofit & OkHttp
+        implementation(libs.retrofit)
+        implementation(libs.converter.gson)
+        implementation(libs.okhttp.logging.interceptor)
+
+        // Room
+        implementation(libs.room.runtime)
+        implementation(libs.room.ktx)
+        ksp(libs.room.compiler)
+
+        // Coroutines
+        implementation(libs.kotlinx.coroutines.android)
+
+        // DataStore
+        implementation(libs.androidx.datastore.preferences)
+
+        // Coil for Images
+        implementation(libs.coil.compose)
+
+        // Timber for Logging
+        implementation(libs.timber)
+
+        // Testing
+        testImplementation(libs.junit)
+        testImplementation(libs.mockk)
+        testImplementation(libs.kotlinx.coroutines.test)
+        testImplementation(libs.turbine)
+        androidTestImplementation(libs.androidx.junit)
+        androidTestImplementation(libs.androidx.espresso.core)
+        androidTestImplementation(platform(libs.androidx.compose.bom))
+        androidTestImplementation(libs.androidx.ui.test.junit4)
+        debugImplementation(libs.androidx.ui.tooling)
+        debugImplementation(libs.androidx.ui.test.manifest)
     }
-    kotlinOptions {
-        jvmTarget = "17"
-        // VERY STRICT: Treat all Kotlin warnings as errors natively
-        freeCompilerArgs += listOf(
-            "-Werror"
-        )
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.10"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-}
-
-dependencies {
-    // Firebase
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics)
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.core.splashscreen)
-
-    // Hilt
-    implementation(libs.hilt.android)
-    implementation(libs.androidx.lifecycle.runtime.compose.android)
-    implementation("com.google.guava:guava:33.0.0-android")
-    ksp(libs.hilt.android.compiler)
-    implementation(libs.androidx.hilt.navigation.compose)
-
-    // Retrofit & OkHttp
-    implementation(libs.retrofit)
-    implementation(libs.converter.gson)
-    implementation(libs.okhttp.logging.interceptor)
-
-    // Room
-    implementation(libs.room.runtime)
-    implementation(libs.room.ktx)
-    ksp(libs.room.compiler)
-
-    // Coroutines
-    implementation(libs.kotlinx.coroutines.android)
-
-    // DataStore
-    implementation(libs.androidx.datastore.preferences)
-
-    // Coil for Images
-    implementation(libs.coil.compose)
-
-    // Timber for Logging
-    implementation(libs.timber)
-
-    // Testing
-    testImplementation(libs.junit)
-    testImplementation(libs.mockk)
-    testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.turbine)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
 }
